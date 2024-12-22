@@ -5,16 +5,38 @@ import {
   AiOutlineMenu,
   AiOutlineSearch,
 } from "react-icons/ai";
+import { CiLogout } from "react-icons/ci";
 import { BsFillCartFill, BsFillSaveFill } from "react-icons/bs";
 import { FaWallet } from "react-icons/fa";
 import { MdFavorite, MdHelp } from "react-icons/md";
 import { TbTruckDelivery } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { FaUser } from "react-icons/fa";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
   const [del, setDel] = useState(false);
+  const navigate = useNavigate();
 
+  const handleCart = () => {
+    const user = localStorage.getItem("Users ID:") || "";
+    console.log(user);
+    if (user == "") {
+      alert("Log in to access cart");
+      navigate("/");
+    } else {
+      navigate("/cart");
+    }
+  };
+
+  const handleLogOut = () => {
+    navigate("/");
+    localStorage.clear();
+    console.log("After deletion:", localStorage.getItem("Users ID:")); // Should print null
+  };
+
+  console.log();
   return (
     <div class="max-w-[1640] mx-auto flex justify-between items-center p-4">
       <div class="flex items-center">
@@ -50,11 +72,12 @@ const Navbar = () => {
           placeholder="Search foods"
         />
       </div>
-      <Link to="/cart">
-        <button class="bg-black text-white hidden md:flex rounded-full items-center py-2">
-          <BsFillCartFill size={20} s />
-        </button>
-      </Link>
+      <button
+        onClick={handleCart}
+        class="bg-black text-white hidden md:flex rounded-full items-center py-2"
+      >
+        <BsFillCartFill size={20} s />
+      </button>
 
       {/* Mobile Menu */}
       {nav ? (
@@ -80,6 +103,11 @@ const Navbar = () => {
         </h2>
         <nav>
           <ul class=" flex flex-col p-4 text-gray-800">
+            <Link to="userLogin">
+              <li class="text-xl py-4 flex">
+                <FaUser size={25} class="mr-4" /> Log In
+              </li>
+            </Link>
             <li class="text-xl py-4 flex">
               <TbTruckDelivery size={25} class="mr-4" /> Orders
             </li>
@@ -100,6 +128,9 @@ const Navbar = () => {
             </li>
             <li class="text-xl py-4 flex">
               <AiFillTag size={25} class="mr-4" /> Invite Friend
+            </li>
+            <li class="text-xl py-4 flex" onClick={handleLogOut}>
+              <CiLogout size={25} class="mr-4" /> Log Out
             </li>
           </ul>
         </nav>

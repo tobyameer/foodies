@@ -12,46 +12,48 @@ const Cart = () => {
     setFood(data);
   }, []);
 
-  const handleDelete = (foodIndex) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this item?"
-    );
-    if (!confirmDelete) return;
-
+  const handleDelete = (index) => {
     try {
-      const updatedFood = [...food];
-      updatedFood.splice(foodIndex, 1); // Remove item at the given index
-      setFood(updatedFood); // Update state
-      localStorage.setItem("foodIds", JSON.stringify(updatedFood)); // Update localStorage
-      alert("Deleted successfully");
+      // Create a new array excluding the item at the specified index
+      const updatedFood = food.filter((_, i) => i !== index);
+
+      // Update the state with the new array
+      setFood(updatedFood);
+
+      // Update localStorage with the new array
+      localStorage.setItem("foodIds", JSON.stringify(updatedFood));
     } catch (error) {
       console.error("Error deleting item:", error);
       alert("Failed to delete. Please try again.");
     }
   };
 
-  const deleteItem = () => {
-    if (food.length === 0) {
+  const deleteAllItems = () => {
+    try {
+      // Clear the food array in the state
+      setFood([]);
+
+      // Remove the entire food list from localStorage
+      localStorage.removeItem("foodids");
+
       alert("All items deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting items:", error);
+      alert("Failed to delete. Please try again.");
+    }
+  };
+  const orderItems = () => {
+    if (food.length === 0) {
+      alert("No items to order!");
       return;
     }
-
-    const item = food[0]; // Get the first item in the list
-    const itemConfirm = window.confirm(`Delete item: ${item.name}?`);
-
-    if (itemConfirm) {
-      const updatedFood = [...food];
-      updatedFood.shift(); // Remove the first item
-      setFood(updatedFood); // Update state
-      localStorage.setItem("foodids", JSON.stringify(updatedFood)); // Update localStorage
-      deleteItem(); // Continue deleting the next item
-    } else {
-      alert("Stopped deleting items.");
-    }
+    handleDelete(); // Delete all items after ordering
+    alert("Order Successful");
   };
   return (
     <div>
       <Navbar />
+      <h1 className="text-[43px] font-bold text-center">Cart</h1>
       {food.length > 0 ? (
         food.map((item, index) => (
           <div
@@ -84,14 +86,17 @@ const Cart = () => {
       ) : (
         <p className="text-center mt-10">No food available</p>
       )}
-      <div className="text-center mt-10">
+      <div className=" flex justify-evenly w-[100%]  items-center text-center mt-[100px]">
         <button
-          onClick={deleteItem}
-          className="h-[40px] rounded-full text-white bg-red-500 px-5"
+          onClick={deleteAllItems}
+          className="w-[150px] h-[60px] rounded-full text-white bg-red-500"
         >
           Delete All
         </button>
-        <button className="h-[40px] mt-[20px] rounded-full text-white bg-black">
+        <button
+          onClick={orderItems}
+          className="border-none w-[150px] h-[60px] rounded-full text-white bg-black"
+        >
           Order
         </button>
       </div>

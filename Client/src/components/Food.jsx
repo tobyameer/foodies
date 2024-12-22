@@ -37,7 +37,7 @@ const Food = () => {
   };
 
   return (
-    <div class="max-w-[1640px] m-auto px-4 py-12">
+    <div class=" w-[100%] m-auto px-4 py-12">
       <h1 class="text-orange-600 font-bold text-center ">
         Top Rated Menu Itmes
       </h1>

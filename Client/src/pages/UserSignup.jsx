@@ -12,15 +12,19 @@ const UserSignup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3001/userSignup", {
-        name,
-        lastName,
-        email,
-        password,
-      })
+      .post(
+        "http://localhost:3001/userSignup",
+        {
+          name,
+          lastName,
+          email,
+          password,
+        },
+        { withCredentials: true }
+      )
       .then((result) => {
         if (result.status === 201) {
-          navigate("/login");
+          navigate("/userlogin");
           console.log("User Created Successfully!");
         }
       })

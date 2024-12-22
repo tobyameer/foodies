@@ -64,7 +64,7 @@ app.post("/userSignup", async (req, res) => {
       password: hashedPassword,
     });
     const savedUser = await newUser.save();
-    express.status(201).json(savedUser);
+    res.status(201).json(savedUser);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
